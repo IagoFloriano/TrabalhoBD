@@ -1,5 +1,5 @@
 DEBUG_FLAGS = -g -DDEBUG
-CFLAGS = -Wall -std=gnu99 -lm
+CFLAGS = -Wall -std=c++17
 EXE = escalona
 CC = g++
 
@@ -15,7 +15,7 @@ debug: all
 $(EXE): conflito.o $(EXE).o visao.o
 	$(CC) -o $@ $^ $(CFLAGS)
 
-%.o: %.c
+%.o: %.cpp
 	$(CC) $(CFLAGS) -c $^
 #------------------------------------------------------------------------------
 clean :
