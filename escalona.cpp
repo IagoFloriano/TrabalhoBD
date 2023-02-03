@@ -31,7 +31,7 @@ int main(){
 
     if(activeTasks.empty()){
       cout << counter++ << " " << tasks[0].id;
-      for(int i {1}; i < tasks.size(); i++){
+      for(size_t i {1}; i < tasks.size(); i++){
         cout << "," << tasks[i].id;
       }
       // do tests

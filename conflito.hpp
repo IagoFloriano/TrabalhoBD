@@ -11,7 +11,10 @@
 #include "util.hpp"
 
 namespace conflito{
-  bool serializavel(std::vector<tarefa_t> tasks);
+  bool serializavel(std::vector<tarefa_t> &tasks);
 }
+
+graph_t makeGraph(std::vector<tarefa_t> &tasks);
+void printGraph(graph_t g);
 
 #endif

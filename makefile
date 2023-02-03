@@ -12,13 +12,12 @@ all : $(EXE)
 debug: CFLAGS += $(DEBUG_FLAGS)
 debug: all
 
-util.o: util.cpp
-	$(CC) $(CFLAGS) -c $^
 
 $(EXE): conflito.o $(EXE).o visao.o util.hpp
 	$(CC) -o $@ $^ $(CFLAGS)
 
-%.o: %.cpp util.hpp
+util.o: util.cpp
+%.o: %.cpp
 	$(CC) $(CFLAGS) -c $^
 #------------------------------------------------------------------------------
 clean :

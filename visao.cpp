@@ -6,8 +6,8 @@
 #ifndef __VISAO__
 #define __VISAO__
 
-#include "visao.hpp"
 #include "util.hpp"
+#include "visao.hpp"
 
 namespace visao{
   bool serializavel(std::vector<tarefa_t> tasks){
