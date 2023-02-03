@@ -2,3 +2,16 @@
  * verificação de equivalencia por visão
  * além disso fazer o grafo para fazer os testes
 */
+
+#ifndef __VISAO__
+#define __VISAO__
+
+#include <iostream>
+#include <vector>
+#include "util.hpp"
+
+namespace visao{
+  bool serializavel(std::vector<tarefa_t> tasks);
+}
+
+#endif

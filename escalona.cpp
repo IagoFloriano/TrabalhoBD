@@ -1,18 +1,14 @@
 #include <bits/stdc++.h>
+#include "conflito.hpp"
+#include "visao.hpp"
+#include "util.hpp"
 
 using std::cout, std::endl, std::cin, std::string;
-
-//              tempo, tipo, variável
-typedef std::tuple<int,char,char> operacao_t;
-
-typedef struct tarefa{
-  int id;
-  std::vector<operacao_t> ops;
-} tarefa_t;
 
 int main(){
   int time, task;
   char type, var;
+  int counter {1};
   std::vector<tarefa_t> tasks {};
   std::set<int> activeTasks {};
   std::map<int, int> taskIndex {};
@@ -34,19 +30,18 @@ int main(){
     tasks[taskIndex[task]].ops.push_back(op);
 
     if(activeTasks.empty()){
-      // do tests
-      for(tarefa_t t: tasks){
-        cout << t.id << ":" << endl;
-        for(operacao_t o: t.ops){
-          cout << std::get<0>(o) << " " << std::get<1>(o) << " " << std::get<2>(o) << endl;
-        }
+      cout << counter++ << " " << tasks[0].id;
+      for(int i {1}; i < tasks.size(); i++){
+        cout << "," << tasks[i].id;
       }
+      // do tests
+      cout << " " << (conflito::serializavel(tasks)?"SS":"NS");
+      cout << " " << (visao::serializavel(tasks)   ?"SV":"NV") << endl;
 
       // reset variables
       activeTasks.clear();
       taskIndex.clear();
       tasks.clear();
-      cout << "Clearing active tasks\n";
     }
   }
 }
