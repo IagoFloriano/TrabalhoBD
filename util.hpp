@@ -7,12 +7,13 @@
 #include <iostream>
 #include <vector>
 
-typedef std::tuple<int,char,char> operacao_t;
+//            tempo transacao tipo
+typedef std::tuple<int,int,char> operacao_t;
 
-typedef struct tarefa{
-  int id;
+typedef struct variavel{
+  char id;
   std::vector<operacao_t> ops;
-} tarefa_t;
+} variavel_t;
 
 typedef struct node{
   int id;

@@ -6,15 +6,15 @@
 #ifndef __CONFLITO__
 #define __CONFLITO__
 
-#include <iostream>
+#include <bits/stdc++.h>
 #include <vector>
 #include "util.hpp"
 
 namespace conflito{
-  bool serializavel(std::vector<tarefa_t> &tasks);
+  bool serializavel(std::vector<variavel_t> &vars, std::set<int> &tasks);
 }
 
-graph_t makeGraph(std::vector<tarefa_t> &tasks);
+graph_t makeGraph(std::vector<variavel_t> &vars, std::set<int> &tasks);
 void printGraph(graph_t g);
 
 #endif

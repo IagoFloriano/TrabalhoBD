@@ -9,27 +9,27 @@
 using std::cout, std::endl;
 namespace conflito{
 
-  bool serializavel(std::vector<tarefa_t> &tasks) {
-    graph_t grafo = makeGraph(tasks);
+  bool serializavel(std::vector<variavel_t> &vars, std::set<int> &tasks) {
+    graph_t grafo = makeGraph(vars, tasks);
     return true;
   }
 
 };
 
-graph_t makeGraph(std::vector<tarefa_t> &tasks) {
+graph_t makeGraph(std::vector<variavel_t> &vars, std::set<int> &tasks) {
   graph_t newg;
-  newg.nodes = std::vector<node>();
+  //newg.nodes = std::vector<node>();
 
-  // adicionar nodos
-  for(size_t i {0}; i < tasks.size(); i++){
-    node_t newn;
-    newn.id = tasks[i].id;
-    newn.edges = std::vector<node_t>();
-    newn.visit_id = 0;
-    newg.nodes.push_back(newn);
-  }
+  //// adicionar nodos
+  //for(size_t i {0}; i < tasks.size(); i++){
+  //  node_t newn;
+  //  newn.id = tasks[i].id;
+  //  newn.edges = std::vector<node_t>();
+  //  newn.visit_id = 0;
+  //  newg.nodes.push_back(newn);
+  //}
 
-  // fazer arestas
+  //// fazer arestas
 
   printGraph(newg);
 

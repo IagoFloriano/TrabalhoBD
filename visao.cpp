@@ -3,16 +3,13 @@
  * além disso fazer o grafo para fazer os testes
 */
 
-#ifndef __VISAO__
-#define __VISAO__
 
 #include "util.hpp"
 #include "visao.hpp"
 
 namespace visao{
-  bool serializavel(std::vector<tarefa_t> tasks){
+  bool serializavel(std::vector<variavel_t> &vars, std::set<int> &tasks){
     return true;
   }
 }
 
-#endif

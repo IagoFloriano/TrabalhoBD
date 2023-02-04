@@ -6,12 +6,12 @@
 #ifndef __VISAO__
 #define __VISAO__
 
-#include <iostream>
+#include <bits/stdc++.h>
 #include <vector>
 #include "util.hpp"
 
 namespace visao{
-  bool serializavel(std::vector<tarefa_t> tasks);
+  bool serializavel(std::vector<variavel_t> &vars, std::set<int> &tasks);
 }
 
 #endif

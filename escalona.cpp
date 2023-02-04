@@ -9,39 +9,48 @@ int main(){
   int time, task;
   char type, var;
   int counter {1};
-  std::vector<tarefa_t> tasks {};
-  std::set<int> activeTasks {};
-  std::map<int, int> taskIndex {};
+  std::vector<variavel_t> vars {}; // salvar operacoes feitas em uma variavel p/ fazer arestas
+  std::set<int> activeTasks {}; // salvar transacoes que nao deram commit p/ saber quando verifica serializacao
+  std::set<int> currTasks {}; // salvar transacoes p/ saber os nodos
+  std::map<char, int> varsIndex {}; // saber onde cada variavel esta em vara p/ poder atualizar
+
   while(cin >> time >> task >> type >> var) {
     cin.ignore();
-    operacao_t op = operacao_t(time, type, var);
+    operacao_t op = operacao_t(time, task, type);
     activeTasks.insert(task);
+    currTasks.insert(task);
 
-    // if first operation add to map
-    if(!taskIndex.count(task)){
-      tarefa_t newtask {};
-      newtask.id = task;
-      newtask.ops = std::vector<operacao_t>(); 
-      tasks.push_back(newtask);
-      taskIndex[task] = tasks.size() - 1;
+    // se primeira vez q variavel foi usada em operacao salvar em varsIndex
+    if(!varsIndex.count(var)){
+      variavel_t newvar {};
+      newvar.id = var;
+      newvar.ops = std::vector<operacao_t>(); 
+      vars.push_back(newvar);
+      varsIndex[task] = vars.size() - 1;
     }
+    // removes de transacoes ativas caso tenha dado commit
     if(type == 'C') activeTasks.erase(task);
 
-    tasks[taskIndex[task]].ops.push_back(op);
+    // salvar operacao p/ variavel
+    vars[varsIndex[var]].ops.push_back(op);
 
     if(activeTasks.empty()){
-      cout << counter++ << " " << tasks[0].id;
-      for(size_t i {1}; i < tasks.size(); i++){
-        cout << "," << tasks[i].id;
+      // imprimir qual numero da serializacao e transacoes
+      std::set<int>::iterator tasksIt = currTasks.begin();
+      cout << counter++ << " " << *tasksIt;
+      for(tasksIt++; tasksIt != currTasks.end(); tasksIt++){
+        cout << "," << *tasksIt;
       }
-      // do tests
-      cout << " " << (conflito::serializavel(tasks)?"SS":"NS");
-      cout << " " << (visao::serializavel(tasks)   ?"SV":"NV") << endl;
 
-      // reset variables
+      // imprimir saida baseada nos testes
+      cout << " " << (conflito::serializavel(vars, currTasks)?"SS":"NS");
+      cout << " " << (visao::serializavel(vars, currTasks)   ?"SV":"NV") << endl;
+
+      // resetar variaveis para poder fazer proximas transacoes
       activeTasks.clear();
-      taskIndex.clear();
-      tasks.clear();
+      currTasks.clear();
+      varsIndex.clear();
+      vars.clear();
     }
   }
 }
