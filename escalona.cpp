@@ -26,7 +26,7 @@ int main(){
       newvar.id = var;
       newvar.ops = std::vector<operacao_t>(); 
       vars.push_back(newvar);
-      varsIndex[task] = vars.size() - 1;
+      varsIndex[var] = vars.size() - 1;
     }
     // removes de transacoes ativas caso tenha dado commit
     if(type == 'C') activeTasks.erase(task);
@@ -41,6 +41,7 @@ int main(){
       for(tasksIt++; tasksIt != currTasks.end(); tasksIt++){
         cout << "," << *tasksIt;
       }
+      cout << endl;
 
       // imprimir saida baseada nos testes
       cout << " " << (conflito::serializavel(vars, currTasks)?"SS":"NS");

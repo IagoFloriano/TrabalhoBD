@@ -6,11 +6,12 @@
 #include "util.hpp"
 #include "conflito.hpp"
 
-using std::cout, std::endl;
 namespace conflito{
 
   bool serializavel(std::vector<variavel_t> &vars, std::set<int> &tasks) {
+
     graph_t grafo = makeGraph(vars, tasks);
+    printGraph(grafo);
     return true;
   }
 
@@ -18,25 +19,44 @@ namespace conflito{
 
 graph_t makeGraph(std::vector<variavel_t> &vars, std::set<int> &tasks) {
   graph_t newg;
-  //newg.nodes = std::vector<node>();
+  newg.nodes = std::vector<node>();
 
-  //// adicionar nodos
-  //for(size_t i {0}; i < tasks.size(); i++){
-  //  node_t newn;
-  //  newn.id = tasks[i].id;
-  //  newn.edges = std::vector<node_t>();
-  //  newn.visit_id = 0;
-  //  newg.nodes.push_back(newn);
-  //}
+  // adicionar nodos
+  for(std::set<int>::iterator it = tasks.begin(); it != tasks.end(); it++){
+    node_t newn;
+    newn.id = *it;
+    newn.edges = std::vector<node_t>();
+    newn.visit_id = 0;
+    newg.nodes.push_back(newn);
+  }
 
-  //// fazer arestas
+  using std::get;
+  // fazer arestas
+  for(variavel_t v: vars){
+    if(v.id == '-') continue;
 
-  printGraph(newg);
+    for(size_t i {0}; i < v.ops.size(); i++){
+      for(size_t j {i+1}; j < v.ops.size(); j++){
+        // se sao a mesma transacao
+        if(get<1>(v.ops[i]) == get<1>(v.ops[j])) continue;
+
+        char opi = get<2>(v.ops[i]);
+        char opj = get<2>(v.ops[j]);
+        if( (opj == 'R' && opi == 'W') ||// Aresta Ti -> Tj para cada r(x) em Tj depois de w(x) em Ti
+            (opj == 'W' && opi == 'R') ||// Aresta Ti -> Tj para cada w(x) em Tj depois de r(x) em Ti
+            (opj == 'W' && opi == 'W')  )// Aresta Ti -> Tj para cada w(x) em Tj depois de w(x) em Ti
+            {
+          addEdge(newg, get<1>(v.ops[i]), get<1>(v.ops[j]));
+        }
+      }
+    }
+  }
 
   return newg;
 }
 
 void printGraph(graph_t g){
+  using std::cout, std::endl;
   for(node_t n: g.nodes){
     cout << n.id << " :";
     for(node_t nn: n.edges){

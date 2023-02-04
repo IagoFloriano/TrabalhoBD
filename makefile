@@ -13,7 +13,7 @@ debug: CFLAGS += $(DEBUG_FLAGS)
 debug: all
 
 
-$(EXE): conflito.o $(EXE).o visao.o util.hpp
+$(EXE): conflito.o $(EXE).o visao.o util.o
 	$(CC) -o $@ $^ $(CFLAGS)
 
 util.o: util.cpp
