@@ -41,7 +41,7 @@ int main(){
       for(tasksIt++; tasksIt != currTasks.end(); tasksIt++){
         cout << "," << *tasksIt;
       }
-      cout << endl;
+      //cout << endl;
 
       // imprimir saida baseada nos testes
       cout << " " << (conflito::serializavel(vars, currTasks)?"SS":"NS");

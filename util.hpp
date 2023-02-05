@@ -17,8 +17,9 @@ typedef struct variavel{
 
 typedef struct node{
   int id;
-  std::vector<node> edges;
-  int visit_id;
+  std::vector<int> edges;
+  int incident; //contagem de arestas que chegam nesse vertice
+  int temp;
 } node_t;
 
 typedef struct graph{
@@ -29,5 +30,10 @@ typedef struct graph{
 // caso a ou b nao existam nao faz nada
 // se a == b nao faz nada
 void addEdge(graph_t &g, int a, int b);
+
+// verifica se o grafo tem uma ordenação topologica
+// retorna true se tem
+// retorna false se nao tem
+bool topoPossible(graph_t &g);
 
 #endif
