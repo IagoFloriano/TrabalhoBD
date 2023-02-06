@@ -26,10 +26,15 @@ typedef struct graph{
   std::vector<node> nodes;
 } graph_t;
 
-// adiciona uma aresta a->b no grafo g, se aresta ja exitir nao faz nada
+// adiciona uma aresta a->b no grafo g, se aresta ja exitir, nao faz nada
 // caso a ou b nao existam nao faz nada
 // se a == b nao faz nada
 void addEdge(graph_t &g, int a, int b);
+
+// remove uma aresta a->b no grafo g, se aresta não exitir, nao faz nada
+// caso a ou b nao existam nao faz nada
+// se a == b nao faz nada
+void rmvEdge(graph_t &g, int a, int b);
 
 // verifica se o grafo tem uma ordenação topologica
 // retorna true se tem

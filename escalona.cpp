@@ -24,7 +24,7 @@ int main(){
     if(!varsIndex.count(var)){
       variavel_t newvar {};
       newvar.id = var;
-      newvar.ops = std::vector<operacao_t>(); 
+      newvar.ops = vector<operacao_t>(); 
       vars.push_back(newvar);
       varsIndex[var] = vars.size() - 1;
     }
@@ -36,7 +36,7 @@ int main(){
 
     if(activeTasks.empty()){
       // imprimir qual numero da serializacao e transacoes
-      std::set<int>::iterator tasksIt = currTasks.begin();
+      set<int>::iterator tasksIt = currTasks.begin();
       cout << counter++ << " " << *tasksIt;
       for(tasksIt++; tasksIt != currTasks.end(); tasksIt++){
         cout << "," << *tasksIt;
@@ -45,7 +45,7 @@ int main(){
 
       // imprimir saida baseada nos testes
       cout << " " << (conflito::serializavel(vars, currTasks)?"SS":"NS");
-      cout << " " << (visao::serializavel(vars, currTasks)   ?"SV":"NV") << endl;
+      cout << " " << (visao::serializavel(vars, currTasks, time)   ?"SV":"NV") << endl;
 
       // resetar variaveis para poder fazer proximas transacoes
       activeTasks.clear();

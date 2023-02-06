@@ -45,7 +45,7 @@ void addEdge(graph_t &g, int a, int b){
   }
 }
 
-void remEdge(graph_t &g, int a, int b){
+void rmvEdge(graph_t &g, int a, int b){
   //se os nodos forem iguais
   if(a==b) return;
   
