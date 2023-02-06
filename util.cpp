@@ -13,6 +13,7 @@ int findNode(graph_t &g, int id){
 }
 
 void addEdge(graph_t &g, int a, int b){
+  //se os nodos forem iguais
   if(a==b) return;
   //std::cout << "Fazendo aresta " << a << "->" << b << std::endl;
   node_t *nodeb {NULL};
@@ -36,6 +37,36 @@ void addEdge(graph_t &g, int a, int b){
     nodea->edges.push_back(nodeb->id);
     nodeb->incident++;
   }
+}
+
+void remEdge(graph_t &g, int a, int b){
+  //se os nodos forem iguais
+  if(a==b) return;
+  
+  //std::cout << "Removendo aresta " << a << "->" << b << std::endl;
+
+  node_t *nodeb {NULL};
+  node_t *nodea {NULL};
+  // achar ambos os nodos
+  for(size_t i = 0; i < g.nodes.size(); i++){
+    if(g.nodes[i].id == a) nodea = &g.nodes[i];
+    if(g.nodes[i].id == b) nodeb = &g.nodes[i];
+  }
+
+  // se nao achou algum
+  if (!nodea || !nodeb) return;
+
+  // verificar se ja existe a aresta
+  for(int i: nodea->edges.size()){
+    if(nodea->edges[i] == nodeb->id){
+      nodea->edges.erase(i);
+      nodeb->incident++;
+      return;
+    }
+  }
+
+  //passando daqui, sabemos que a aresta n existe
+  //std::cout << "Não existe aresta de "  << a << " para " << b << std::endl;
 }
 
 bool topoPossible(graph_t &g){
