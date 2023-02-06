@@ -17,6 +17,8 @@ namespace visao{
   bool serializavel(std::vector<variavel_t> &vars, std::set<int> &tasks, int last_time);
 }
 
+bool permutaArestasETesta (graph_t &grafo, vector<pair<ii,ii>> &vetorPares, int iAtual, int tamVec);
+
 graph_t makeGraph(std::vector<variavel_t> &vars, std::set<int> &tasks, vector<pair<ii,ii>> &vetorPares);
 
 #endif

@@ -7,7 +7,7 @@
 #include "util.hpp"
 #include "visao.hpp"
 
-using std::set, std::vector, std::pair;
+using std::set, std::vector, std::pair, std::get;
 using ii = pair<int,int>;
 
 namespace visao{
@@ -30,8 +30,34 @@ namespace visao{
 
     graph_t grafo = makeGraph(vars, tasks, vetorPares);
 
-    return true;
+    return permutaArestasETesta(grafo, vetorPares, 0, vetorPares.size());
   }
+}
+
+bool permutaArestasETesta (graph_t &grafo, vector<pair<ii,ii>> &vetorPares, int iAtual, int tamVec){
+  //base da recursão, as arestas já foram postas
+  if (iAtual == tamVec)
+    return topoPossible(grafo);
+
+  int origem_1  = get<0>(get<0>(vetorPares[iAtual]));
+  int destino_1 = get<1>(get<0>(vetorPares[iAtual]));
+  int origem_2  = get<0>(get<1>(vetorPares[iAtual]));
+  int destino_2 = get<1>(get<1>(vetorPares[iAtual]));
+
+  //coloca a primeira aresta possível do par
+  addEdge(grafo, origem_1, destino_1);
+
+  if (permutaArestasETesta (grafo, vetorPares, iAtual+1, tamVec))
+    return true;
+
+  //cola a primeira pois agr colocaremos a segunda
+  rmvEdge(grafo, origem_1, destino_1);
+
+  //coloca a segunda aresta possível do par
+  addEdge(grafo, origem_2, destino_2);
+
+  //se não deu certo com a primeira aresta, a resposta será se funciona com a segunda
+  return (permutaArestasETesta (grafo, vetorPares, iAtual+1, tamVec));
 }
 
 graph_t makeGraph(vector<variavel_t> &vars, set<int> &tasks, vector<pair<ii,ii>> &vetorPares){
@@ -48,7 +74,6 @@ graph_t makeGraph(vector<variavel_t> &vars, set<int> &tasks, vector<pair<ii,ii>>
     newg.nodes.push_back(newn);
   }
 
-  using std::get;
   // fazer arestas
   for(variavel_t v: vars){
     if(v.id == '-') continue;
