@@ -19,10 +19,16 @@ void addEdge(graph_t &g, int a, int b){
   node_t *nodeb {NULL};
   node_t *nodea {NULL};
   // achar ambos os nodos
-  for(size_t i = 0; i < g.nodes.size(); i++){
+  /*for(size_t i = 0; i < g.nodes.size(); i++){
     if(g.nodes[i].id == a) nodea = &g.nodes[i];
     if(g.nodes[i].id == b) nodeb = &g.nodes[i];
-  }
+  }*/
+
+  int i_a = findNode(g, a);
+  int i_b = findNode(g, b);
+
+  nodea = &g.nodes[i_a];
+  nodeb = &g.nodes[i_b];
 
   // se nao achou algum
   if (!nodea || !nodeb) return;
@@ -48,10 +54,16 @@ void remEdge(graph_t &g, int a, int b){
   node_t *nodeb {NULL};
   node_t *nodea {NULL};
   // achar ambos os nodos
-  for(size_t i = 0; i < g.nodes.size(); i++){
+  /*for(size_t i = 0; i < g.nodes.size(); i++){
     if(g.nodes[i].id == a) nodea = &g.nodes[i];
     if(g.nodes[i].id == b) nodeb = &g.nodes[i];
-  }
+  }*/
+
+  int i_a = findNode(g, a);
+  int i_b = findNode(g, b);
+
+  nodea = &g.nodes[i_a];
+  nodeb = &g.nodes[i_b];
 
   // se nao achou algum
   if (!nodea || !nodeb) return;
