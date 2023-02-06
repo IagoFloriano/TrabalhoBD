@@ -3,16 +3,16 @@
 #include "visao.hpp"
 #include "util.hpp"
 
-using std::cout, std::endl, std::cin, std::string;
+using std::cout, std::endl, std::cin, std::string, std::vector, std::set, std::map;
 
 int main(){
   int time, task;
   char type, var;
   int counter {1};
-  std::vector<variavel_t> vars {}; // salvar operacoes feitas em uma variavel p/ fazer arestas
-  std::set<int> activeTasks {}; // salvar transacoes que nao deram commit p/ saber quando verifica serializacao
-  std::set<int> currTasks {}; // salvar transacoes p/ saber os nodos
-  std::map<char, int> varsIndex {}; // saber onde cada variavel esta em vara p/ poder atualizar
+  vector<variavel_t> vars {};   // salvar operacoes feitas em uma variavel p/ fazer arestas
+  set<int> activeTasks {};      // salvar transacoes que nao deram commit p/ saber quando verifica serializacao
+  set<int> currTasks {};        // salvar transacoes p/ saber os nodos
+  map<char, int> varsIndex {};  // saber onde cada variavel esta em vara p/ poder atualizar
 
   while(cin >> time >> task >> type >> var) {
     cin.ignore();

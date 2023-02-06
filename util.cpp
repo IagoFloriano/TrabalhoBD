@@ -69,8 +69,8 @@ void remEdge(graph_t &g, int a, int b){
   if (!nodea || !nodeb) return;
 
   // verificar se ja existe a aresta
-  for(int i: nodea->edges.size()){
-    if(nodea->edges[i] == nodeb->id){
+  for(auto i = nodea->edges.begin() ; i != nodea->edges.end() ; i++){
+    if(*i == nodeb->id){
       nodea->edges.erase(i);
       nodeb->incident++;
       return;
