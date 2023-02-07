@@ -82,10 +82,13 @@ bool permutaArestasETesta (graph_t &grafo, vector<pair<ii,ii>> &vetorPares, int 
   if(!existia_1) rmvEdge(grafo, origem_1, destino_1);
 
   //coloca a segunda aresta possível do par
+  bool existia_2 = hasEdge(grafo, origem_2, destino_2);
   addEdge(grafo, origem_2, destino_2);
 
   //se não deu certo com a primeira aresta, a resposta será se funciona com a segunda
-  return (permutaArestasETesta (grafo, vetorPares, iAtual+1, tamVec));
+  bool result = permutaArestasETesta(grafo, vetorPares, iAtual+1, tamVec);
+  if(!existia_2) rmvEdge(grafo, origem_2, destino_2);
+  return result;
 }
 
 graph_t makeGraph(vector<variavel_t> &vars, set<int> &tasks, vector<pair<ii,ii>> &vetorPares){
