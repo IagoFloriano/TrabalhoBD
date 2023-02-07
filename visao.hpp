@@ -21,4 +21,6 @@ bool permutaArestasETesta (graph_t &grafo, vector<pair<ii,ii>> &vetorPares, int 
 
 graph_t makeGraph(std::vector<variavel_t> &vars, std::set<int> &tasks, vector<pair<ii,ii>> &vetorPares);
 
+void makePair(graph_t &g, std::vector<pair<ii,ii>> &vetorPares, std::set<int> &tasks, variavel_t v, size_t i, size_t j);
+
 #endif

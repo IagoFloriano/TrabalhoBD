@@ -27,11 +27,11 @@ void addEdge(graph_t &g, int a, int b){
   int i_a = findNode(g, a);
   int i_b = findNode(g, b);
 
+  // se nao achou algum
+  if (i_a == -1 || i_b == -1) return;
+
   nodea = &g.nodes[i_a];
   nodeb = &g.nodes[i_b];
-
-  // se nao achou algum
-  if (!nodea || !nodeb) return;
 
   // verificar se ja existe a aresta
   bool exists {false};

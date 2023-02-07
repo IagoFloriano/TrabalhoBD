@@ -1,7 +1,7 @@
 /* arquivo que será reponsável por implementar as funções usadas para
  * verificação de equivalencia por visão
  * além disso fazer o grafo para fazer os testes
-*/
+ */
 
 
 #include "util.hpp"
@@ -12,23 +12,41 @@ using ii = pair<int,int>;
 
 namespace visao{
   bool serializavel(vector<variavel_t> &vars, set<int> &tasks, int last_time){
-    tasks.insert(tasks.size()+1);   //coloca a TF
-    tasks.insert(0);                //coloca a T0
+    std::cerr << std::endl;
+    int tf = -1; //(int)(tasks.size()+1);
+    tasks.insert(tf); //coloca a TF
+    tasks.insert(0);  //coloca a T0
 
     operacao_t op_0 = operacao_t(0, 0, 'W');
-    operacao_t op_F = operacao_t(last_time+1, tasks.size()+1, 'R');
+    operacao_t op_F = operacao_t(last_time+1, tf, 'R');
 
     //passa por todas as variaveis e coloca uma op de escrita em tf e uma de leitura em t0
-    for(variavel_t v: vars){
+    for(variavel_t &v: vars){
       if(v.id == '-') continue;
 
       v.ops.push_back(op_0);
       v.ops.push_back(op_F);
+      std::sort(v.ops.begin(), v.ops.end());
     }
 
     vector<pair<ii,ii>> vetorPares;
 
     graph_t grafo = makeGraph(vars, tasks, vetorPares);
+
+    for(node_t n: grafo.nodes){
+      std::cerr << n.id << "(" << n.incident << ") :";
+      for(int nn: n.edges){
+        std::cerr << " " << nn;
+      }
+      std::cerr << std::endl;
+    }
+
+    for(auto p: vetorPares){
+      int v1, v2, v3, v4;
+      std::tie(v1, v2) = p.first;
+      std::tie(v3, v4) = p.second;
+      std::cerr << "[(" << v1 << "," << v2 << ") (" << v3 << "," << v4 << ")]" << std::endl;
+    }
 
     return permutaArestasETesta(grafo, vetorPares, 0, vetorPares.size());
   }
@@ -65,7 +83,7 @@ graph_t makeGraph(vector<variavel_t> &vars, set<int> &tasks, vector<pair<ii,ii>>
   newg.nodes = std::vector<node>();
 
   // adicionar nodos
-  for(std::set<int>::iterator it = tasks.begin(); it != tasks.end(); it++){
+  for(std::set<int>::iterator it = tasks.begin(); it != tasks.end(); ++it){
     node_t newn;
     newn.incident = 0;
     newn.id = *it;
@@ -79,47 +97,63 @@ graph_t makeGraph(vector<variavel_t> &vars, set<int> &tasks, vector<pair<ii,ii>>
     if(v.id == '-') continue;
 
     for(size_t i {0}; i < v.ops.size(); i++){
+      char opi = get<2>(v.ops[i]);
+      if( opi != 'W') continue;
+      // testar apenas transacoes que leram de i
       for(size_t j {i+1}; j < v.ops.size(); j++){
         // se sao a mesma transacao
         if(get<1>(v.ops[i]) == get<1>(v.ops[j])) continue;
 
-        char opi = get<2>(v.ops[i]);
         char opj = get<2>(v.ops[j]);
-        if( (opj == 'R' && opi == 'W') ||// Aresta Ti -> Tj para cada r(x) em Tj depois de w(x) em Ti
-            (opj == 'W' && opi == 'R') ||// Aresta Ti -> Tj para cada w(x) em Tj depois de r(x) em Ti
-            (opj == 'W' && opi == 'W')  )// Aresta Ti -> Tj para cada w(x) em Tj depois de w(x) em Ti
-            {
+        if (opj == 'W') break;
+        // j leu de i
+        if(opj == 'R'){
+          std::cerr << get<1>(v.ops[j]) << " leu de " << get<1>(v.ops[i]) << std::endl;
+          std::cerr << get<1>(v.ops[i]) << "->" << get<1>(v.ops[j]) << std::endl;
           addEdge(newg, get<1>(v.ops[i]), get<1>(v.ops[j]));
-
-          //aqui faz a parte da cosntrução do vetor de pares
-          for(size_t k {j+1}; k < v.ops.size(); k++){
-            // se sao a mesma transacao
-            if((get<1>(v.ops[i]) == get<1>(v.ops[k])) ||
-               (get<1>(v.ops[j]) == get<1>(v.ops[k]))) continue;
-
-            char opk = get<2>(v.ops[k]);
-            if (opk == 'W'){
-
-              //caso Ti == To ou Tj == Tf
-              if ((i == 0) || (j == tasks.size()+1)){
-                if (i != 0)
-                  addEdge(newg, get<1>(v.ops[k]), get<1>(v.ops[i]));
-                else //if (j != tasks.size()+1)
-                  addEdge(newg, get<1>(v.ops[j]), get<1>(v.ops[k]));
-              }
-              else{
-                ii el1 = pair(k,i);
-                ii el2 = pair(j,k);
-
-                pair<ii,ii> par = pair(el1,el2);  //um par de arestas
-                vetorPares.push_back(par);        //coloca no vetor
-              }
-            }
-          }
+          makePair(newg, vetorPares, tasks, v, i, j);
         }
       }
     }
   }
 
   return newg;
+}
+
+void makePair(graph_t &g, std::vector<pair<ii,ii>> &vetorPares, std::set<int> &tasks, variavel_t v, size_t i, size_t j){
+
+  //aqui faz a parte da cosntrução do vetor de pares
+  for(size_t k {0}; k < v.ops.size(); k++){
+    // se sao a mesma transacao ou se k == i ou k == j
+    if( (k == i || j == k) ||
+        (get<1>(v.ops[i]) == get<1>(v.ops[k])) ||
+        (get<1>(v.ops[j]) == get<1>(v.ops[k]))) continue;
+
+    char opk = get<2>(v.ops[k]);
+    if (opk == 'W'){
+
+      int ti = get<1>(v.ops[i]);
+      int tj = get<1>(v.ops[j]);
+      int tk = get<1>(v.ops[k]);
+      std::cerr << tj << " leu de " << ti << " mas " << tk << " tambem escreveu" << std::endl;
+      //caso Ti == To ou Tj == Tf
+      if ((ti == 0) || (tj == -1)){
+        if (ti != 0){
+          std::cerr << tk << "->" << ti << std::endl;
+          addEdge(g, tk, ti);
+        }
+        else if (tj != (int)(tasks.size()+1)){
+          std::cerr << tj << "->" << tk << std::endl;
+          addEdge(g, tj, tk);
+        }
+      }
+      else{
+        ii el1 = pair(tk,ti);
+        ii el2 = pair(tj,tk);
+
+        pair<ii,ii> par = pair(el1,el2);  //um par de arestas
+        vetorPares.push_back(par);        //coloca no vetor
+      }
+    }
+  }
 }
