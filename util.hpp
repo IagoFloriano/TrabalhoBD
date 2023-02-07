@@ -41,4 +41,9 @@ void rmvEdge(graph_t &g, int a, int b);
 // retorna false se nao tem
 bool topoPossible(graph_t &g);
 
+// verifica se uma aresta existe
+// retorna true se existe
+// retorna false se nao existe
+bool hasEdge(graph_t &g, int a, int b);
+
 #endif

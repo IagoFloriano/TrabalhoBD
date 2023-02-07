@@ -54,8 +54,17 @@ namespace visao{
 
 bool permutaArestasETesta (graph_t &grafo, vector<pair<ii,ii>> &vetorPares, int iAtual, int tamVec){
   //base da recursão, as arestas já foram postas
-  if (iAtual == tamVec)
+  if (iAtual == tamVec){
+    std::cerr << "Testar essa permutação" << std::endl;
+    for(node_t n: grafo.nodes){
+      std::cerr << n.id << "(" << n.incident << ") :";
+      for(int nn: n.edges){
+        std::cerr << " " << nn;
+      }
+      std::cerr << std::endl;
+    }
     return topoPossible(grafo);
+  }
 
   int origem_1  = get<0>(get<0>(vetorPares[iAtual]));
   int destino_1 = get<1>(get<0>(vetorPares[iAtual]));
@@ -63,13 +72,14 @@ bool permutaArestasETesta (graph_t &grafo, vector<pair<ii,ii>> &vetorPares, int 
   int destino_2 = get<1>(get<1>(vetorPares[iAtual]));
 
   //coloca a primeira aresta possível do par
+  bool existia_1 = hasEdge(grafo, origem_1, destino_1);
   addEdge(grafo, origem_1, destino_1);
 
   if (permutaArestasETesta (grafo, vetorPares, iAtual+1, tamVec))
     return true;
 
   //cola a primeira pois agr colocaremos a segunda
-  rmvEdge(grafo, origem_1, destino_1);
+  if(!existia_1) rmvEdge(grafo, origem_1, destino_1);
 
   //coloca a segunda aresta possível do par
   addEdge(grafo, origem_2, destino_2);
@@ -147,7 +157,7 @@ void makePair(graph_t &g, std::vector<pair<ii,ii>> &vetorPares, std::set<int> &t
           addEdge(g, tj, tk);
         }
       }
-      else{
+      else if (tk != 0 && tk != -1){
         ii el1 = pair(tk,ti);
         ii el2 = pair(tj,tk);
 
