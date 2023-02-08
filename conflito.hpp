@@ -15,6 +15,5 @@ namespace conflito{
 }
 
 graph_t makeGraph(std::vector<variavel_t> &vars, std::set<int> &tasks);
-void printGraph(graph_t g);
 
 #endif

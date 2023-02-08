@@ -15,7 +15,6 @@ int findNode(graph_t &g, int id){
 void addEdge(graph_t &g, int a, int b){
   //se os nodos forem iguais
   if(a==b) return;
-  //std::cout << "Fazendo aresta " << a << "->" << b << std::endl;
   node_t *nodeb {NULL};
   node_t *nodea {NULL};
 
@@ -45,8 +44,6 @@ void rmvEdge(graph_t &g, int a, int b){
   //se os nodos forem iguais
   if(a==b) return;
   
-  //std::cout << "Removendo aresta " << a << "->" << b << std::endl;
-
   node_t *nodeb {NULL};
   node_t *nodea {NULL};
   // achar ambos os nodos
@@ -70,7 +67,6 @@ void rmvEdge(graph_t &g, int a, int b){
   }
 
   //passando daqui, sabemos que a aresta n existe
-  //std::cout << "Não existe aresta de "  << a << " para " << b << std::endl;
 }
 
 bool topoPossible(graph_t &g){

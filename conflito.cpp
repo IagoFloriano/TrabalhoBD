@@ -11,7 +11,6 @@ namespace conflito{
   bool serializavel(std::vector<variavel_t> &vars, std::set<int> &tasks) {
 
     graph_t grafo = makeGraph(vars, tasks);
-    // printGraph(grafo);
     return topoPossible(grafo);
   }
 
@@ -54,15 +53,4 @@ graph_t makeGraph(std::vector<variavel_t> &vars, std::set<int> &tasks) {
   }
 
   return newg;
-}
-
-void printGraph(graph_t g){
-  using std::cout, std::endl;
-  for(node_t n: g.nodes){
-    cout << n.id << "(" << n.incident << ") :";
-    for(int nn: n.edges){
-      cout << " " << nn;
-    }
-    cout << endl;
-  }
 }

@@ -12,7 +12,6 @@ using ii = pair<int,int>;
 
 namespace visao{
   bool serializavel(vector<variavel_t> &vars, set<int> &tasks, int last_time){
-    std::cerr << std::endl;
     int tf = -1; //(int)(tasks.size()+1);
     tasks.insert(tf); //coloca a TF
     tasks.insert(0);  //coloca a T0
@@ -33,21 +32,6 @@ namespace visao{
 
     graph_t grafo = makeGraph(vars, tasks, vetorPares);
 
-    for(node_t n: grafo.nodes){
-      std::cerr << n.id << "(" << n.incident << ") :";
-      for(int nn: n.edges){
-        std::cerr << " " << nn;
-      }
-      std::cerr << std::endl;
-    }
-
-    for(auto p: vetorPares){
-      int v1, v2, v3, v4;
-      std::tie(v1, v2) = p.first;
-      std::tie(v3, v4) = p.second;
-      std::cerr << "[(" << v1 << "," << v2 << ") (" << v3 << "," << v4 << ")]" << std::endl;
-    }
-
     return permutaArestasETesta(grafo, vetorPares, 0, vetorPares.size());
   }
 }
@@ -55,14 +39,6 @@ namespace visao{
 bool permutaArestasETesta (graph_t &grafo, vector<pair<ii,ii>> &vetorPares, int iAtual, int tamVec){
   //base da recursão, as arestas já foram postas
   if (iAtual == tamVec){
-    std::cerr << "Testar essa permutação" << std::endl;
-    for(node_t n: grafo.nodes){
-      std::cerr << n.id << "(" << n.incident << ") :";
-      for(int nn: n.edges){
-        std::cerr << " " << nn;
-      }
-      std::cerr << std::endl;
-    }
     return topoPossible(grafo);
   }
 
@@ -121,8 +97,6 @@ graph_t makeGraph(vector<variavel_t> &vars, set<int> &tasks, vector<pair<ii,ii>>
         if (opj == 'W') break;
         // j leu de i
         if(opj == 'R'){
-          std::cerr << get<1>(v.ops[j]) << " leu de " << get<1>(v.ops[i]) << std::endl;
-          std::cerr << get<1>(v.ops[i]) << "->" << get<1>(v.ops[j]) << std::endl;
           addEdge(newg, get<1>(v.ops[i]), get<1>(v.ops[j]));
           makePair(newg, vetorPares, tasks, v, i, j);
         }
@@ -148,15 +122,12 @@ void makePair(graph_t &g, std::vector<pair<ii,ii>> &vetorPares, std::set<int> &t
       int ti = get<1>(v.ops[i]);
       int tj = get<1>(v.ops[j]);
       int tk = get<1>(v.ops[k]);
-      std::cerr << tj << " leu de " << ti << " mas " << tk << " tambem escreveu" << std::endl;
       //caso Ti == To ou Tj == Tf
       if ((ti == 0) || (tj == -1)){
         if (ti != 0){
-          std::cerr << tk << "->" << ti << std::endl;
           addEdge(g, tk, ti);
         }
         else if (tj != (int)(tasks.size()+1)){
-          std::cerr << tj << "->" << tk << std::endl;
           addEdge(g, tj, tk);
         }
       }
