@@ -1,0 +1,70 @@
+Ideia do trabalho:
+  Dada uma determinada entrada com alguns escalonamentos, determinar se cada escalonamento é serializável por conflito, e se é serializável por equivalencia de visão.
+
+Leitura da entrada:
+  São usadas 4 estruturas:
+    activeTasks: um conjunto com as transações do escalonamento atual que não deram commit, se esse conjunto está vazio o escalonamento acabou.
+    currTasks: um conjunto com as transações do escalonamento atual, ou seja, os vertices dos algorítos que serão usados para os teste.
+    vars: um vetor que salva as operações realizadas em cada variável. Cada posição do vetor contem o nome da variável que sofrem operações, assim como um vetor tendo as operações realizadas nela. Cada operação é apenas uma tupla da seguinte forma (tempo, transação, tipo da operação).
+    varsIndex: um hashmap usado para facilitar alterações a serem feitas no vetor vars.
+
+(nos seguintes algorítimos será usado q tx = transação que executou operação x)
+Teste por conflito:
+  O teste por conflito é dado pelo seguinte algorítimo:
+    G é um grafo vazio
+    Para cada tarefa em tasks faça {
+      adicione um nodo com o id da tarefa ao grafo G
+    }
+    Para cada variável v em vars faça {
+      Para cada par (i, j) de operações em v.ops faça{
+        Se ((tempo de i < tempo de j) e 
+            ((operação de i == 'W' e operação de j == 'W')
+             (operação de i == 'R' e operação de j == 'W')
+             (operação de i == 'W' e operação de j == 'R'))){
+          adicione a aresta ti->tj ao grafo G
+        }
+      }
+    }
+    Se grafo G tem uma ordenação topológica então é serializável por conflito, caso contrário não é.
+
+Teste por visão equivalência:
+  O teste por visão equivalência é dado pelo seguinte algorítimo:
+    Adicione tarefa 0 e tarefa -1(tf) a tasks
+    Para cada variável v em vars faça{
+      adicione as operação (0,    0, 'W') à v.
+      adicione as operação (inf, -1, 'R') à v.
+    }
+    Faça vetorPares um vetor para salvar um par de arestas em cada posição
+    Faça G um grafo vazio
+    Para cada variável v em vars faça{
+      Para cada par (i, j) de operações em v.ops faça{
+        Se j é uma operação de leitura e i uma de escrita, e não há mais nenhuma operação de escrita entre i e j{
+          adicione a aresta ti->tj
+          Se existe alguma operação k de escrita em v.ops e k != i faça{
+            Se ti é 0 adicione a aresta tj->tk a G
+            Se tj é -1 adicione a aresta tk->ti a G
+            Se tk não é 0 nem -1 adicione o par (tk->ti, tj->tk) a vetorPares
+          }
+        }
+      }
+    }
+    Escolha uma possibilidade do vetor de pares, sendo que cada possibilidade é apenas um dos elementos do par de cada posição.
+    Adicione as arestas dessa escolha a G, se G tem uma ordenação topológia é equivalente por visão
+    Senão remova as arestas colocadas que não existiam no grafo G e teste outra escolha.
+    Se todas as escolhas foram testadas e faz com que o grafo G tenha uma ordenação topológica não é equivalente por visão.
+
+Teste se grafo G tem ordenação topológica:
+  O teste se um grafo G tem ordenação topológica é dado pelo seguinte algorítimo:
+    Crie um vetor S vazio
+    Crie um vetor L vazio
+    Adicione todos os vertices com 0 arestas incidentes a S
+    Enquanto S não foi vazio faça {
+      remova um vertice n de S
+      adicione n a L
+      para todo nodo v tal que existe uma aresta n->v {
+        Remova a aresta u->v do grafo G
+        Se v agora tem 0 arestas incidentes adicione v a S
+      }
+    }
+    Se L tem mesma quantidade de elementos quanto o número de vértices em G então existem ordenação topológica em G
+    Senão não existe ordenação topológica para G

@@ -127,7 +127,7 @@ void makePair(graph_t &g, std::vector<pair<ii,ii>> &vetorPares, std::set<int> &t
         if (ti != 0){
           addEdge(g, tk, ti);
         }
-        else if (tj != (int)(tasks.size()+1)){
+        else {
           addEdge(g, tj, tk);
         }
       }
