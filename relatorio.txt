@@ -1,4 +1,4 @@
-Ideia do trabalho:
+    Ideia do trabalho:
   Dada uma determinada entrada com alguns escalonamentos, determinar se cada escalonamento é serializável por conflito, e se é serializável por equivalencia de visão.
 
 Leitura da entrada:
@@ -62,7 +62,7 @@ Teste se grafo G tem ordenação topológica:
       remova um vertice n de S
       adicione n a L
       para todo nodo v tal que existe uma aresta n->v {
-        Remova a aresta u->v do grafo G
+        Remova a aresta n->v do grafo G
         Se v agora tem 0 arestas incidentes adicione v a S
       }
     }
